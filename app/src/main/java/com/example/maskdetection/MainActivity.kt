@@ -4,13 +4,18 @@ import android.graphics.Rect
 import android.media.Image
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.mlkit.common.model.LocalModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions
 import com.otaliastudios.cameraview.CameraView
+import com.otaliastudios.cameraview.controls.Facing
 import com.otaliastudios.cameraview.frame.Frame
 
 
@@ -18,14 +23,18 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var textView: TextView
     lateinit var cameraOverlay: OverlayView
+    lateinit var cameraView: CameraView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val cameraView = findViewById<CameraView>(R.id.cameraView)
+        cameraView = findViewById<CameraView>(R.id.cameraView)
         cameraOverlay = findViewById(R.id.cameraOverlay)
         textView = findViewById(R.id.textView)
         cameraView.setLifecycleOwner(this)
+
+        cameraView.frameProcessingExecutors = 3
+        cameraView.frameProcessingPoolSize = 4
 
 
         val localModel = LocalModel.Builder()
@@ -107,7 +116,23 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.camera_menu, menu)
+        return true
+    }
 
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.action_change_facing) {
+            if(cameraView.facing == Facing.BACK) {
+                cameraView.facing = Facing.FRONT
+            } else {
+                cameraView.facing = Facing.BACK
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
 
 
