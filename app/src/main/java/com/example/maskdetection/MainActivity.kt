@@ -21,7 +21,6 @@ import com.otaliastudios.cameraview.frame.Frame
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var textView: TextView
     lateinit var cameraOverlay: OverlayView
     lateinit var cameraView: CameraView
 
@@ -30,7 +29,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         cameraView = findViewById<CameraView>(R.id.cameraView)
         cameraOverlay = findViewById(R.id.cameraOverlay)
-        textView = findViewById(R.id.textView)
         cameraView.setLifecycleOwner(this)
 
         cameraView.frameProcessingExecutors = 3
@@ -87,7 +85,6 @@ class MainActivity : AppCompatActivity() {
                 .addOnFailureListener {
 //                callback("Unable to detect an object")
                     Log.v("TAG", it.toString())
-                    textView.text = "Unable to detect an object"
                 }
         }
     }
